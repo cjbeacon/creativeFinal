@@ -4,20 +4,21 @@ const router = express.Router();
 const auth = require("./auth.js");
 
 //
-// Tickets
+// Notes
 //
 
-const ticketSchema = new mongoose.Schema({
-  name: String,
-  problem: String,
+const noteSchema = new mongoose.Schema({
+  title: String,
+  txt: String,
+  usrid: String,
 });
 
-const Ticket = mongoose.model('Ticket', ticketSchema);
+const Note = mongoose.model('Note', noteSchema);
 
-router.get('/', async (req, res) => {
+router.get('/:id', auth.verifyToken, async (req, res) => {
   try {
-    let tickets = await Ticket.find();
-    return res.send(tickets);
+    let notes = await Note.find({ "usrid": req.params.id});
+    return res.send(notes);
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -25,13 +26,14 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const ticket = new Ticket({
-    name: req.body.name,
-    problem: req.body.problem
+  const note = new Note({
+    title: req.body.title,
+    txt: req.body.txt,
+    usrid: req.body.usrid,
   });
   try {
-    await ticket.save();
-    return res.send(ticket);
+    await note.save();
+    return res.send(note);
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -40,7 +42,7 @@ router.post('/', async (req, res) => {
 
 router.delete('/:id', auth.verifyToken, async (req, res) => {
   try {
-    await Ticket.deleteOne({
+    await Note.deleteOne({
       _id: req.params.id
     });
     return res.sendStatus(200);

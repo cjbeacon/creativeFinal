@@ -19,8 +19,8 @@ mongoose.connect('mongodb://localhost:27017/tickets', {
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
-const tickets = require("./tickets.js");
-app.use("/api/tickets", tickets);
+const notes = require("./notes.js");
+app.use("/api/notes", notes);
 const users = require("./users.js");
 app.use("/api/users", users);
 

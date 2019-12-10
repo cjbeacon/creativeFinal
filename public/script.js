@@ -6,16 +6,17 @@ var app = new Vue({
     username: '',
     password: '',
     error: '',
-    addedName: '',
-    addedProblem: '',
-    tickets: {},
+    addedTitle: '',
+    addedTxt: '',
+    notes: {},
   },
   created() {
     this.getUser();
-    this.getTickets();
+    this.getNotes();
   },
   methods: {
     toggleForm() {
+      this.getNotes();
       this.error = "";
       this.username = "";
       this.password = "";
@@ -55,6 +56,7 @@ var app = new Vue({
       try {
         let response = await axios.delete("/api/users");
         this.user = null;
+        this.getNotes();
       }
       catch (error) {
         // don't worry about it
@@ -64,15 +66,17 @@ var app = new Vue({
       try {
         let response = await axios.get("/api/users");
         this.user = response.data;
+        this.getNotes();
       }
       catch (error) {
         // Not logged in. That's OK!
       }
     },
-    async getTickets() {
+    async getNotes() {
       try {
-        let response = await axios.get("/api/tickets");
-        this.tickets = response.data;
+        let url = "/api/notes/" + this.user.username
+        let response = await axios.get(url);
+        this.notes = response.data;
       }
       catch (error) {
         console.log(error);
@@ -81,24 +85,25 @@ var app = new Vue({
     closeForm() {
       this.showForm = false;
     },
-    async addTicket() {
+    async addNote() {
       try {
-        let response = await axios.post("/api/tickets", {
-          name: this.addedName,
-          problem: this.addedProblem
+        let response = await axios.post("/api/notes", {
+          title: this.addedTitle,
+          txt: this.addedTxt,
+          usrid: this.user.username,
         });
-        this.addedName = "";
-        this.addedProblem = "";
-        this.getTickets();
+        this.addedTitle = "";
+        this.addedTxt = "";
+        this.getNotes();
       }
       catch (error) {
         console.log(error);
       }
     },
-    async deleteTicket(ticket) {
+    async deleteNote(note) {
       try {
-        let response = await axios.delete("/api/tickets/" + ticket._id);
-        this.getTickets();
+        let response = await axios.delete("/api/notes/" + note._id);
+        this.getNotes();
       }
       catch (error) {
         this.toggleForm();

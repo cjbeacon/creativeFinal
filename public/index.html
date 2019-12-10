@@ -43,30 +43,34 @@
       </div>
     </transition>
     <div class="content" v-if="user">
-      <form @submit.prevent="addTicket">
-        <input v-model="addedName" placeholder="Name"></p>
-        <textarea v-model="addedProblem"></textarea>
+      <form @submit.prevent="addNote">
+        <input v-model="addedTitle" placeholder="Title"></p>
+        <textarea v-model="addedTxt"></textarea>
         <br />
         <button type="submit">Submit</button>
       </form>
 
-      <h3>Tickets</h3>
-      <div v-for="ticket in tickets">
+      <h3>Notes</h3>
+      <div v-for="note in notes">
         <hr>
         <div class="ticket">
           <div class="problem">
-            <p>{{ticket.problem}}</p>
-            <p><i>-- {{ticket.name}}</i></p>
+            <p>{{note.title}}</p>
+            <p><i>-- {{note.txt}}</i></p>
           </div>
           <div class="delete">
-            <button @click="deleteTicket(ticket)" class="delete">Delete</button>
+            <button @click="deleteNote(note)" class="delete">Delete</button>
           </div>
         </div>
       </div>
     </div>
-    <div d-else class="center">
+    <div v-else class="center">
       <button type="button" @click="toggleForm" class="btn btn-primary">Register or Login</button>
     </div>
+  </div>
+  <br><br><br><br><br><br>
+  <div class="footer">
+    <a href="https://github.com/cjbeacon/creativeFinal">Github</a>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js" integrity="sha256-mpnrJ5DpEZZkwkE1ZgkEQQJW/46CSEh/STrZKOB/qoM=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.7/vue.js" integrity="sha256-g+Q8DFAmG5+eyRPSydX0LY4TfjsL11XSDrIGerbbEdA=" crossorigin="anonymous"></script>
